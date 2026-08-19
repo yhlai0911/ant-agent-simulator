@@ -6,7 +6,7 @@
   <title>雙蟻資源競爭模擬實驗室</title>
   <style>
     body{margin:0;min-height:100vh;display:grid;place-items:center;background:#071019;color:#edf6fb;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}
-    main{max-width:38rem;padding:2rem;text-align:center} .error{color:#ffb2bc} code{color:#9ae8dc}
+    main{max-width:38rem;padding:2rem;text-align:center}.error{color:#ffb2bc}code{color:#9ae8dc}
   </style>
 </head>
 <body>
@@ -18,18 +18,20 @@
   <script src="payload-04.js"></script>
   <script src="payload-05.js"></script>
   <script>
-    (async () => {
-      try {
-        if (!("DecompressionStream" in window)) throw new Error("此瀏覽器不支援 DecompressionStream，請更新 Safari、Chrome、Edge 或 Firefox。");
-        const binary = atob(window.__ANT_PAYLOAD.join(""));
-        const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
-        const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
-        const html = await new Response(stream).text();
-        document.open();
-        document.write(html);
-        document.close();
-      } catch (error) {
-        document.getElementById("loading").innerHTML = `<h1 class="error">載入失敗</h1><p>${error.message}</p><p>請改用最新版瀏覽器。</p>`;
+    (async()=>{
+      try{
+        if(!("DecompressionStream" in window))throw new Error("此瀏覽器不支援 DecompressionStream，請更新 Safari、Chrome、Edge 或 Firefox。");
+        const binary=atob(window.__ANT_PAYLOAD.join(""));
+        const bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+        const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+        let html=await new Response(stream).text();
+        const tabStyle=`<style id="ant-model-tab-style">body{padding-top:58px!important}#ant-model-tabs{position:fixed;z-index:2147483647;top:0;left:0;right:0;height:58px;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;box-sizing:border-box;background:rgba(7,16,25,.92);border-bottom:1px solid rgba(130,228,209,.24);backdrop-filter:blur(16px);font-family:Inter,system-ui,-apple-system,"Noto Sans TC",sans-serif}#ant-model-tabs a{display:inline-flex;align-items:center;justify-content:center;min-width:132px;padding:8px 13px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:800;line-height:1.2;color:#a9bec8;border:1px solid transparent}#ant-model-tabs a:hover{color:#edf6fb;background:#132733}#ant-model-tabs a.active{color:#06231d;background:#82e4d1;box-shadow:0 5px 18px rgba(130,228,209,.18)}@media(max-width:520px){#ant-model-tabs{gap:5px;padding:7px 8px}#ant-model-tabs a{min-width:0;flex:1;padding:8px 5px;font-size:13px}}</style>`;
+        const tabs=`<nav id="ant-model-tabs" aria-label="主要分頁"><a class="active" href="index.html" aria-current="page">模擬監看</a><a href="model.html">模型方程式與文獻</a></nav>`;
+        html=html.replace(/<\/head>/i,tabStyle+"</head>");
+        html=html.replace(/<body([^>]*)>/i,"<body$1>"+tabs);
+        document.open();document.write(html);document.close();
+      }catch(error){
+        document.getElementById("loading").innerHTML=`<h1 class="error">載入失敗</h1><p>${error.message}</p><p>請改用最新版瀏覽器。</p>`;
         console.error(error);
       }
     })();
